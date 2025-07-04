@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Daily Assist</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="icons/icon-192.png" />
+</head>
+<body>
+  <header>
+    <h1 id="app-title">📅 Daily Assist</h1>
+    <div class="lang-toggle">
+      <button onclick="setLanguage('el')">🇬🇷</button>
+      <button onclick="setLanguage('en')">🇬🇧</button>
+      <button onclick="toggleTheme()">🌓</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="todo">
+      <h2 id="todo-title">📝 Λίστα Εργασιών</h2>
+      <input type="text" id="taskInput" placeholder="Νέα εργασία..." />
+      <ul id="taskList"></ul>
+    </section>
+
+    <section class="journal">
+      <h2 id="journal-title">✍️ Καθημερινό Σημειωματάριο</h2>
+      <textarea id="journal" placeholder="Σημείωσε τις σκέψεις σου..."></textarea>
+    </section>
+
+    <p id="quote"></p>
+  </main>
+
+  <script src="lang.js"></script>
+  <script src="script.js"></script>
+  <script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("service-worker.js")
+        .then(reg => console.log("SW registered:", reg.scope))
+        .catch(err => console.log("SW failed:", err));
+    }
+  </script>
+</body>
+</html>
