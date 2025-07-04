@@ -1,4 +1,4 @@
-// JS logic here 
+// --- TASKS LIST ---
 const taskInput = document.getElementById("taskInput");
 const taskList = document.getElementById("taskList");
 
@@ -6,10 +6,13 @@ taskInput.addEventListener("keyup", (e) => {
   if (e.key === "Enter" && taskInput.value.trim()) {
     const li = document.createElement("li");
     li.textContent = taskInput.value;
-    li.addEventListener("click", () => li.remove());
+    li.addEventListener("click", () => {
+      li.remove();
+      saveTasks();
+    });
     taskList.appendChild(li);
-    taskInput.value = "";
     saveTasks();
+    taskInput.value = "";
   }
 });
 
@@ -23,37 +26,56 @@ function loadTasks() {
   saved.forEach(text => {
     const li = document.createElement("li");
     li.textContent = text;
-    li.addEventListener("click", () => li.remove());
+    li.addEventListener("click", () => {
+      li.remove();
+      saveTasks();
+    });
     taskList.appendChild(li);
   });
 }
-loadTasks();
 
-// Journaling
+// --- JOURNAL SECTION ---
 const journal = document.getElementById("journal");
-journal.value = localStorage.getItem("journal") || "";
-journal.addEventListener("input", () => {
-  localStorage.setItem("journal", journal.value);
-});
 
-// Theme
-function toggleTheme() {
-  document.body.classList.toggle("dark");
+function loadJournal() {
+  journal.value = localStorage.getItem("journal") || "";
+  journal.addEventListener("input", () => {
+    localStorage.setItem("journal", journal.value);
+  });
 }
 
-// Language
+// --- THEME PERSISTENCE ---
+function toggleTheme() {
+  document.body.classList.toggle("dark");
+  const isDark = document.body.classList.contains("dark");
+  localStorage.setItem("theme", isDark ? "dark" : "light");
+}
+
+// Apply saved theme on load
+function applySavedTheme() {
+  const savedTheme = localStorage.getItem("theme");
+  if (savedTheme === "dark") {
+    document.body.classList.add("dark");
+  }
+}
+
+// --- LANGUAGE TOGGLE + PERSISTENCE ---
 function setLanguage(lang) {
   const strings = translations[lang];
   if (!strings) return;
-
   document.getElementById("app-title").textContent = strings.title;
   document.getElementById("todo-title").textContent = strings.todo;
   document.getElementById("journal-title").textContent = strings.journal;
-  journal.placeholder = strings.placeholder;
+  document.getElementById("journal").placeholder = strings.placeholder;
+  localStorage.setItem("lang", lang);
 }
 
-// Quote
-const quoteBox = document.getElementById("quote");
+function applySavedLanguage() {
+  const lang = localStorage.getItem("lang") || (navigator.language.startsWith("el") ? "el" : "en");
+  setLanguage(lang);
+}
+
+// --- DAILY QUOTE ---
 const quotes = [
   "Μην αναβάλλεις για αύριο ό,τι μπορείς να κάνεις σήμερα.",
   "Small steps every day lead to big change.",
@@ -61,9 +83,21 @@ const quotes = [
   "Focus on progress, not perfection.",
   "Η δύναμη είναι μέσα σου."
 ];
-quoteBox.textContent = `"${quotes[Math.floor(Math.random() * quotes.length)]}"`;
 
-// 🔓 Κάνε τις συναρτήσεις διαθέσιμες στο HTML
-window.setLanguage = setLanguage;
+function loadQuote() {
+  const quoteBox = document.getElementById("quote");
+  quoteBox.textContent = `"${quotes[Math.floor(Math.random() * quotes.length)]}"`;
+}
+
+// --- INIT ---
+window.addEventListener("DOMContentLoaded", () => {
+  applySavedTheme();
+  applySavedLanguage();
+  loadTasks();
+  loadJournal();
+  loadQuote();
+});
+
+// --- Export για χρήση από HTML onclick
 window.toggleTheme = toggleTheme;
-
+window.setLanguage = setLanguage;
