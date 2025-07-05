@@ -1,8 +1,8 @@
-// --- TASKS LIST ---
+// ----- TO-DO LIST -----
 const taskInput = document.getElementById("taskInput");
 const taskList = document.getElementById("taskList");
 
-taskInput.addEventListener("keyup", (e) => {
+taskInput?.addEventListener("keyup", (e) => {
   if (e.key === "Enter" && taskInput.value.trim()) {
     const li = document.createElement("li");
     li.textContent = taskInput.value;
@@ -34,24 +34,57 @@ function loadTasks() {
   });
 }
 
-// --- JOURNAL SECTION ---
+// ----- JOURNAL -----
 const journal = document.getElementById("journal");
+const journalDate = document.getElementById("journalDate");
 
-function loadJournal() {
-  journal.value = localStorage.getItem("journal") || "";
-  journal.addEventListener("input", () => {
-    localStorage.setItem("journal", journal.value);
-  });
+function initJournalDate() {
+  if (!journalDate || !journal) return;
+  const today = new Date().toISOString().split("T")[0];
+  journalDate.value = today;
+  loadJournalForDate(today);
 }
 
-// --- THEME PERSISTENCE ---
+journalDate?.addEventListener("change", () => {
+  loadJournalForDate(journalDate.value);
+});
+
+function loadJournalForDate(date) {
+  if (!journal) return;
+  const content = localStorage.getItem(`journal-${date}`) || "";
+  journal.value = content;
+}
+
+function saveJournal() {
+  const date = journalDate?.value;
+  const content = journal?.value.trim();
+  if (date && content !== undefined) {
+    localStorage.setItem(`journal-${date}`, content);
+    alert("✅ Αποθηκεύτηκε!");
+  }
+}
+
+function exportJournal() {
+  const date = journalDate?.value;
+  const content = journal?.value.trim();
+  if (!content) return alert("📭 Το ημερολόγιο είναι άδειο!");
+
+  const blob = new Blob([content], { type: "text/plain" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = `journal-${date}.txt`;
+  link.click();
+  URL.revokeObjectURL(url);
+}
+
+// ----- THEME -----
 function toggleTheme() {
   document.body.classList.toggle("dark");
   const isDark = document.body.classList.contains("dark");
   localStorage.setItem("theme", isDark ? "dark" : "light");
 }
 
-// Apply saved theme on load
 function applySavedTheme() {
   const savedTheme = localStorage.getItem("theme");
   if (savedTheme === "dark") {
@@ -59,14 +92,14 @@ function applySavedTheme() {
   }
 }
 
-// --- LANGUAGE TOGGLE + PERSISTENCE ---
+// ----- LANGUAGE -----
 function setLanguage(lang) {
   const strings = translations[lang];
   if (!strings) return;
   document.getElementById("app-title").textContent = strings.title;
   document.getElementById("todo-title").textContent = strings.todo;
   document.getElementById("journal-title").textContent = strings.journal;
-  document.getElementById("journal").placeholder = strings.placeholder;
+  if (journal) journal.placeholder = strings.placeholder;
   localStorage.setItem("lang", lang);
 }
 
@@ -75,29 +108,32 @@ function applySavedLanguage() {
   setLanguage(lang);
 }
 
-// --- DAILY QUOTE ---
-const quotes = [
-  "Μην αναβάλλεις για αύριο ό,τι μπορείς να κάνεις σήμερα.",
-  "Small steps every day lead to big change.",
-  "Η συνήθεια είναι ο καλύτερος φίλος της πειθαρχίας.",
-  "Focus on progress, not perfection.",
-  "Η δύναμη είναι μέσα σου."
-];
-
+// ----- QUOTE -----
 function loadQuote() {
   const quoteBox = document.getElementById("quote");
-  quoteBox.textContent = `"${quotes[Math.floor(Math.random() * quotes.length)]}"`;
+  const quotes = [
+    "Μην αναβάλλεις για αύριο ό,τι μπορείς να κάνεις σήμερα.",
+    "Small steps every day lead to big change.",
+    "Η συνήθεια είναι ο καλύτερος φίλος της πειθαρχίας.",
+    "Focus on progress, not perfection.",
+    "Η δύναμη είναι μέσα σου."
+  ];
+  if (quoteBox) {
+    quoteBox.textContent = `"${quotes[Math.floor(Math.random() * quotes.length)]}"`;
+  }
 }
 
-// --- INIT ---
+// ----- INIT -----
 window.addEventListener("DOMContentLoaded", () => {
   applySavedTheme();
   applySavedLanguage();
   loadTasks();
-  loadJournal();
+  initJournalDate();
   loadQuote();
 });
 
-// --- Export για χρήση από HTML onclick
-window.toggleTheme = toggleTheme;
+// ----- EXPORT TO HTML -----
 window.setLanguage = setLanguage;
+window.toggleTheme = toggleTheme;
+window.saveJournal = saveJournal;
+window.exportJournal = exportJournal;

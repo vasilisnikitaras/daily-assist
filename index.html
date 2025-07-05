@@ -25,10 +25,18 @@
       <ul id="taskList"></ul>
     </section>
 
-    <section class="journal">
-      <h2 id="journal-title">✍️ Καθημερινό Σημειωματάριο</h2>
-      <textarea id="journal" placeholder="Σημείωσε τις σκέψεις σου..."></textarea>
-    </section>
+   <section class="journal">
+  <h2 id="journal-title">✍️ Καθημερινό Σημειωματάριο</h2>
+  
+  <label for="journalDate">📆 Ημερομηνία:</label>
+  <input type="date" id="journalDate" />
+
+  <textarea id="journal" placeholder="Σημείωσε τις σκέψεις σου..."></textarea>
+  
+  <button onclick="saveJournal()">💾 Αποθήκευση</button>
+  <button onclick="exportJournal()">📥 Εξαγωγή</button>
+</section>
+
 
     <p id="quote"></p>
   </main>

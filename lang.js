@@ -1,4 +1,4 @@
-{const translations = {
+const translations = {
   el: {
     title: "📅 Daily Assist",
     todo: "📝 Λίστα Εργασιών",
@@ -18,4 +18,3 @@ window.addEventListener("DOMContentLoaded", () => {
   const lang = navigator.language.startsWith("el") ? "el" : "en";
   setLanguage(lang);
 });
-} 
