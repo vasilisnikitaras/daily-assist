@@ -124,3 +124,15 @@ ul#taskList li {
     grid-template-columns: 1fr;
   }
 }
+
+ul#taskList li:hover {
+  opacity: 0.85;
+  cursor: pointer;
+}
+
+* {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+body.dark section {
+  background: rgba(255, 255, 255, 0.05);
+}
