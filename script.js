@@ -157,3 +157,22 @@ window.setLanguage = setLanguage;
 window.toggleTheme = toggleTheme;
 window.saveJournal = saveJournal;
 window.exportJournal = exportJournal;
+
+function saveTasks() {
+  const tasks = Array.from(taskList.children).map(li => ({ text: li.textContent }));
+  localStorage.setItem("tasks", JSON.stringify(tasks));
+}
+
+function loadTasks() {
+  const saved = JSON.parse(localStorage.getItem("tasks")) || [];
+  saved.forEach(item => {
+    const li = document.createElement("li");
+    li.textContent = typeof item === "string" ? item : item.text;
+    li.addEventListener("click", () => {
+      li.remove();
+      saveTasks();
+    });
+    taskList.appendChild(li);
+  });
+}
+
