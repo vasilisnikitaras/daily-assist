@@ -86,3 +86,16 @@ ul#taskList li {
     grid-template-columns: 1fr;
   }
 }
+
+.prompt-box {
+  margin-bottom: 10px;
+  background: var(--accent, #f0f0f0);
+  color: var(--text);
+  padding: 10px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.95rem;
+}
+
