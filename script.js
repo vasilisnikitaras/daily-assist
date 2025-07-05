@@ -130,6 +130,26 @@ window.addEventListener("DOMContentLoaded", () => {
   loadTasks();
   initJournalDate();
   loadQuote();
+
+  // ----- JOURNAL PROMPT -----
+  const prompts = [
+    "What’s one moment today you’re grateful for?",
+    "What challenged you today—and how did you respond?",
+    "Describe a small win you had today.",
+    "What did you learn about yourself recently?",
+    "How do you want to feel tomorrow?",
+    "What would your ideal day look like?"
+  ];
+  const promptText = document.getElementById("prompt-text");
+  const promptBtn = document.getElementById("new-prompt-btn");
+
+  function showRandomPrompt() {
+    const index = Math.floor(Math.random() * prompts.length);
+    promptText.textContent = prompts[index];
+  }
+
+  promptBtn?.addEventListener("click", showRandomPrompt);
+  if (promptText) showRandomPrompt();
 });
 
 // ----- EXPORT TO HTML -----
