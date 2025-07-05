@@ -1,4 +1,4 @@
-/* Normalize box sizing and transitions */
+/* Box sizing and transition reset */
 * {
   box-sizing: border-box;
   transition: background-color 0.3s ease, color 0.3s ease;
@@ -10,8 +10,8 @@
   --accent: #f4a261;
   --task-bg: #ffffffcc;
 
-  --bg: #fefefe;   /* Light mode background */
-  --text: #333;    /* Light mode text */
+  --bg: #fefefe;
+  --text: #333;
 }
 
 body.dark {
@@ -26,61 +26,67 @@ body {
   background-color: var(--bg);
   color: var(--text);
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-/* Header */
+/* Header styling */
 header {
-  padding: 1rem;
+  padding: 1.5rem;
   text-align: center;
   background: var(--primary);
   color: #fff;
+  width: 100%;
+  max-width: 700px;
+  border-radius: 0 0 12px 12px;
 }
 
-/* Buttons (Language + Theme toggle) */
+/* Language + Theme toggle */
 .lang-toggle button,
 #theme-toggle {
-  margin: 0 4px;
+  margin: 0 6px;
   font-size: 1.2rem;
-  cursor: pointer;
   background: none;
   border: none;
   color: inherit;
+  cursor: pointer;
   transition: transform 0.2s ease;
 }
-
 .lang-toggle button:hover,
 #theme-toggle:hover {
   transform: scale(1.1);
 }
 
-/* Main content layout */
+/* Main layout */
 main {
-  padding: 1rem;
-  display: grid;
+  padding: 2rem 1rem;
+  display: flex;
+  flex-direction: column;
   gap: 2rem;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  width: 100%;
+  max-width: 700px;
 }
 
-/* Card-style sections */
+/* Section styling */
 section {
   background: var(--task-bg);
-  border-radius: 8px;
-  padding: 1rem;
-  box-shadow: 0 4px 10px #0001;
+  border-radius: 10px;
+  padding: 1.25rem;
+  box-shadow: 0 4px 12px #0001;
   display: flex;
   flex-direction: column;
 }
 
-/* Inputs and Journal */
+/* Inputs and journal area */
 input[type="text"],
 textarea {
   width: 100%;
-  display: block;
-  padding: 0.6rem;
+  padding: 0.65rem;
   margin-top: 0.5rem;
+  font-size: 1rem;
   border: 1px solid #ccc;
   border-radius: 6px;
-  font-size: 1rem;
   background-color: var(--bg);
   color: var(--text);
   resize: vertical;
@@ -91,27 +97,25 @@ textarea:focus {
   box-shadow: 0 0 0 2px var(--accent);
 }
 
-/* Task list styles */
+/* Task List */
 ul#taskList {
   list-style: none;
   padding: 0;
-  margin: 0.5rem 0 0;
+  margin-top: 0.75rem;
 }
-
 ul#taskList li {
-  padding: 0.5rem;
-  margin: 0.3rem 0;
   background: var(--accent);
   color: #fff;
+  padding: 0.5rem;
+  margin: 0.3rem 0;
   border-radius: 4px;
   cursor: pointer;
 }
-
 ul#taskList li:hover {
   opacity: 0.85;
 }
 
-/* Prompt above journal */
+/* Prompt box */
 .prompt-box {
   margin-bottom: 10px;
   background: var(--accent);
@@ -128,18 +132,23 @@ ul#taskList li:hover {
 #quote {
   font-style: italic;
   text-align: center;
-  margin-top: 1.5rem;
+  margin: 2rem 0 1rem;
   opacity: 0.8;
+  max-width: 700px;
+  padding: 0 1rem;
 }
 
-/* Dark mode card background */
+/* Dark mode section tweak */
 body.dark section {
   background: rgba(255, 255, 255, 0.05);
 }
 
-/* Mobile layout */
-@media (max-width: 600px) {
+/* Responsive adjustments */
+@media (max-width: 500px) {
+  header {
+    border-radius: 0;
+  }
   main {
-    grid-template-columns: 1fr;
+    padding: 1rem;
   }
 }
