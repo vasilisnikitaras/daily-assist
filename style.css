@@ -118,5 +118,17 @@ body.dark {
   --text: #e0e0e0;
 }
 
+textarea {
+  width: 100%;
+  min-height: 200px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: var(--bg, #fff);
+  color: var(--text, #000);
+  font-size: 1rem;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  resize: vertical;
+}
 
 
