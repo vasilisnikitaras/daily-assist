@@ -1,56 +1,46 @@
-// ----- TO-DO LIST -----
+// ----- TASK MANAGEMENT -----
 const taskInput = document.getElementById("taskInput");
 const taskList = document.getElementById("taskList");
 
-taskInput?.addEventListener("keyup", (e) => {
-  if (e.key === "Enter" && taskInput.value.trim()) {
-    const li = document.createElement("li");
-    li.textContent = taskInput.value;
-    li.addEventListener("click", () => {
-      li.remove();
-      saveTasks();
-    });
-    taskList.appendChild(li);
-    saveTasks();
-    taskInput.value = "";
-  }
-});
-
 function saveTasks() {
-  const tasks = Array.from(taskList.children).map(li => li.textContent);
+  const tasks = Array.from(taskList.children).map(li => ({ text: li.textContent }));
   localStorage.setItem("tasks", JSON.stringify(tasks));
 }
 
 function loadTasks() {
   const saved = JSON.parse(localStorage.getItem("tasks")) || [];
-  saved.forEach(text => {
-    const li = document.createElement("li");
-    li.textContent = text;
-    li.addEventListener("click", () => {
-      li.remove();
-      saveTasks();
-    });
-    taskList.appendChild(li);
-  });
+  saved.forEach(item => addTask(typeof item === "string" ? item : item.text));
 }
 
-// ----- JOURNAL -----
+function addTask(text) {
+  const li = document.createElement("li");
+  li.textContent = text;
+  li.addEventListener("click", () => {
+    li.remove();
+    saveTasks();
+  });
+  taskList.appendChild(li);
+}
+
+taskInput?.addEventListener("keyup", (e) => {
+  if (e.key === "Enter" && taskInput.value.trim()) {
+    addTask(taskInput.value.trim());
+    saveTasks();
+    taskInput.value = "";
+  }
+});
+
+// ----- JOURNAL MANAGEMENT -----
 const journal = document.getElementById("journal");
 const journalDate = document.getElementById("journalDate");
 
 function initJournalDate() {
-  if (!journalDate || !journal) return;
   const today = new Date().toISOString().split("T")[0];
   journalDate.value = today;
   loadJournalForDate(today);
 }
 
-journalDate?.addEventListener("change", () => {
-  loadJournalForDate(journalDate.value);
-});
-
 function loadJournalForDate(date) {
-  if (!journal) return;
   const content = localStorage.getItem(`journal-${date}`) || "";
   journal.value = content;
 }
@@ -78,7 +68,11 @@ function exportJournal() {
   URL.revokeObjectURL(url);
 }
 
-// ----- THEME -----
+journalDate?.addEventListener("change", () => {
+  loadJournalForDate(journalDate.value);
+});
+
+// ----- THEME HANDLING -----
 function toggleTheme() {
   document.body.classList.toggle("dark");
   const isDark = document.body.classList.contains("dark");
@@ -108,7 +102,7 @@ function applySavedLanguage() {
   setLanguage(lang);
 }
 
-// ----- QUOTE -----
+// ----- QUOTE OF THE DAY -----
 function loadQuote() {
   const quoteBox = document.getElementById("quote");
   const quotes = [
@@ -123,6 +117,16 @@ function loadQuote() {
   }
 }
 
+// ----- JOURNAL PROMPTS -----
+const prompts = [
+  "What’s one moment today you’re grateful for?",
+  "What challenged you today—and how did you respond?",
+  "Describe a small win you had today.",
+  "What did you learn about yourself recently?",
+  "How do you want to feel tomorrow?",
+  "What would your ideal day look like?"
+];
+
 // ----- INIT -----
 window.addEventListener("DOMContentLoaded", () => {
   applySavedTheme();
@@ -131,15 +135,6 @@ window.addEventListener("DOMContentLoaded", () => {
   initJournalDate();
   loadQuote();
 
-  // ----- JOURNAL PROMPT -----
-  const prompts = [
-    "What’s one moment today you’re grateful for?",
-    "What challenged you today—and how did you respond?",
-    "Describe a small win you had today.",
-    "What did you learn about yourself recently?",
-    "How do you want to feel tomorrow?",
-    "What would your ideal day look like?"
-  ];
   const promptText = document.getElementById("prompt-text");
   const promptBtn = document.getElementById("new-prompt-btn");
 
@@ -152,27 +147,8 @@ window.addEventListener("DOMContentLoaded", () => {
   if (promptText) showRandomPrompt();
 });
 
-// ----- EXPORT TO HTML -----
+// ----- EXPORT FUNCTIONS -----
 window.setLanguage = setLanguage;
 window.toggleTheme = toggleTheme;
 window.saveJournal = saveJournal;
 window.exportJournal = exportJournal;
-
-function saveTasks() {
-  const tasks = Array.from(taskList.children).map(li => ({ text: li.textContent }));
-  localStorage.setItem("tasks", JSON.stringify(tasks));
-}
-
-function loadTasks() {
-  const saved = JSON.parse(localStorage.getItem("tasks")) || [];
-  saved.forEach(item => {
-    const li = document.createElement("li");
-    li.textContent = typeof item === "string" ? item : item.text;
-    li.addEventListener("click", () => {
-      li.remove();
-      saveTasks();
-    });
-    taskList.appendChild(li);
-  });
-}
-
